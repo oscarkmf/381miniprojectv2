@@ -26,76 +26,6 @@ var users;
 var currentUser;
 var criteria = {};
 
-app.get('/',function(req,res) {
-	userLogin();
-	res.redirect('/login');
-});
-app.get('/login',function(req,res) {
-	res.render('loginForm', {});
-});
-app.post('/login',function(req,res) {
-	console.log(users);
-	req.session.authenticated = false;
-	for (var i=0; i<users.length; i++) {
-		if (users[i].name == req.body.name &&
-		    users[i].password == req.body.password) {
-			req.session.authenticated = true;
-			req.session.username = users[i].name;
-			currentUser = users[i].name;
-		}
-	}
-	if(req.session.authenticated == true){
-		res.redirect('/main');
-	}else{
-		res.redirect('/login');
-	}
-});
-
-app.get('/main',function(req,res) {
-	mainPageShowRestaurant(res,{});
-});
-
-app.get('/create',function(req,res) {
-	res.render('createForm', {});
-});
-app.post('/create',function(req,res) {
-	createRestaurant(res, req);
-});
-
-app.get('/display',function(req,res) {
-	var queryAsObject = req.query;
-	console.log(queryAsObject);
-	displayRestaurant(res, queryAsObject);
-});
-
-app.get('/rate',function(req,res) {
- 	var queryAsObject = req.query;
- 	var _id = req.query._id;
- 	res.render('rate', {_id:_id});
-});
-app.post('/rate',function(req,res) {
-	rate(res, req);
-});
-
-app.get('/edit',function(req,res) {
- 	var queryAsObject = req.query;
- 	editRestaurantForm(res, queryAsObject);
-});
-app.post('/edit',function(req,res) {
-	edit(res, req);
-});
-
-app.get('/search',function(req,res) {
-	res.render('search', {});
-});
-app.post('/search',function(req,res) {
-	search(res, req);
-});
-app.get('/delete',function(req,res) {
- 	var queryAsObject = req.query;
- 	remove(res, queryAsObject);
-});
-
 //RESTful
 app.post('/api/restaurant',function(req,res) {
  	var query = {};
@@ -160,7 +90,7 @@ app.get('/api/restaurant/read/borough/:borname',function(req,res) {
 	      } catch (err) {
 	        res.status(500).send('MongoClient connect() failed!');
 	      }
-	      result.name = req.params.borname;      
+	      result.borough = req.params.borname;      
 	      console.log('Connected to MongoDB');
 	      findRestaurant(db, result, function(restaurant) {
 	        db.close();
@@ -177,7 +107,7 @@ app.get('/api/restaurant/read/cuisine/:cuisname',function(req,res) {
 	      } catch (err) {
 	        res.status(500).send('MongoClient connect() failed!');
 	      }
-	      result.name = req.params.cuisname;      
+	      result.cuisine = req.params.cuisname;      
 	      console.log('Connected to MongoDB');
 	      findRestaurant(db, result, function(restaurant) {
 	        db.close();
@@ -186,11 +116,32 @@ app.get('/api/restaurant/read/cuisine/:cuisname',function(req,res) {
 	      });
 	});
 });
-
-
-app.get('/logout',function(req,res) {
-	req.session = null;
-	res.redirect('/');
+app.get('/loginpre',function(req,res) {
+	userLogin();
+	res.redirect('/login');
+});
+app.get('/',function(req,res) {
+	res.redirect('/login');
+});
+app.get('/login',function(req,res) {
+	res.render('loginForm', {});
+});
+app.post('/login',function(req,res) {
+	console.log(users);
+	req.session.authenticated = false;
+	for (var i=0; i<users.length; i++) {
+		if (users[i].name == req.body.name &&
+		    users[i].password == req.body.password) {
+			req.session.authenticated = true;
+			req.session.username = users[i].name;
+			currentUser = users[i].name;
+		}
+	}
+	if(req.session.authenticated == true){
+		res.redirect('/main');
+	}else{
+		res.redirect('/login');
+	}
 });
 
 //Login function
@@ -223,6 +174,66 @@ function checkUser(db,callback) {
     }
   });
 }
+
+app.get('/logout',function(req,res) {
+	req.session = null;
+	res.redirect('/');
+});
+
+app.use('/',function(req,res, next) {
+	if(req.session.username == null){
+		userLogin();
+		res.redirect('/loginpre');
+	}else{
+		next();
+	}
+});
+
+app.get('/main',function(req,res) {
+	mainPageShowRestaurant(res,{});
+});
+
+app.get('/create',function(req,res) {
+	res.render('createForm', {});
+});
+app.post('/create',function(req,res) {
+	createRestaurant(res, req);
+});
+
+app.get('/display',function(req,res) {
+	var queryAsObject = req.query;
+	console.log(queryAsObject);
+	displayRestaurant(res, queryAsObject);
+});
+
+app.get('/rate',function(req,res) {
+ 	var queryAsObject = req.query;
+ 	var _id = req.query._id;
+ 	res.render('rate', {_id:_id});
+});
+app.post('/rate',function(req,res) {
+	rate(res, req);
+});
+
+app.get('/edit',function(req,res) {
+ 	var queryAsObject = req.query;
+ 	editRestaurantForm(res, queryAsObject);
+});
+app.post('/edit',function(req,res) {
+	edit(res, req);
+});
+
+app.get('/search',function(req,res) {
+	res.render('search', {});
+});
+app.post('/search',function(req,res) {
+	search(res, req);
+});
+app.get('/delete',function(req,res) {
+ 	var queryAsObject = req.query;
+ 	remove(res, queryAsObject);
+});
+
 
 //Main page
 function mainPageShowRestaurant(res, criteria){
