@@ -1,0 +1,42 @@
+<html>
+	<body>
+	<head>
+		<title>Restaurant</title>
+		<h1>Restaurants</h1>
+		<h2>Users: <%= user%></h2>
+		<p>Criteria: <%= criteria%></p>
+		<p>Showing <%=rest.length%> documents</p>
+	</head>
+	<form action="/create">
+		<input type="submit" value="Create New Restaurant">
+	</form>
+	<form action="/search">
+		<input type="submit" value="Search Restaurant">
+	</form>
+	<% if (rest.length != 0) { %>	
+	<table>
+		<tr>
+			<th>
+				Name
+			</th>
+		</tr>
+		<% for (var i = 0; i < rest.length; i++) { %>
+			<tr>
+				<td>
+					<a href=/display?_id=<%= rest[i]._id %>><p><%= rest[i].name %></p>
+				</td>	
+			</tr>
+		<% } %>
+	</table>	
+	<% } else { %>
+		<p>
+			There is no record!
+		</p>
+	<% } %>
+	</br>
+	<form action="/logout">
+		<input type="submit" value="Logout">
+	</form>
+	</body>
+</html>
+

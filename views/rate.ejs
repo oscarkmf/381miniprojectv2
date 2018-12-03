@@ -1,0 +1,14 @@
+<html>
+    <head>
+	<title>
+		Rate
+	</title>
+    </head>
+    <body>
+        <form method="post" action="/rate" enctype="multipart/form-data">
+        	<input name="_id" value="<%= _id %>" style="display: none;">
+			Rate:  <input type="number" name="rate" min="1" max="10"><br>
+		<input type="submit" value="Submit">
+	</form>
+    </body>
+</html>

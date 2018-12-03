@@ -1,0 +1,25 @@
+<html>
+	<body>
+	<head>
+		<title>Edit Restaurant</title>
+		<h1>Edit Restaurants</h1>
+		</head>
+		<form action="/edit" method="post" enctype="multipart/form-data">
+			<input name="_id" value="<%= rest._id %>" style="display: none;">
+			Restaurant ID: <input type="text" name="restaurantId" value=<%=rest.restaurant_id %> ><br>
+			Name: <input type="text" name="name" required value=<%= rest.name %>><br>
+			Borough: <input type="text" name="borough" value=<%= rest.borough %>><br>
+			Cuisine: <input type="text" name="cuisine" value=<%= rest.cuisine %>><br>
+			Photo: <input type="file" name="filetoupload"><br>
+			Address:<br>
+			&#8195;	Street: <input type="text" name="street" value=<%= rest.address.street %>><br>
+			&#8195;	Building: <input type="text" name="building" value=<%= rest.address.building %>><br>
+			&#8195;	Zipcode: <input type="text" name="zipcode" value=<%= rest.address.zipcode %>><br>
+			&#8195;	Coordx: <input type="text" name="coordx" value=<%= rest.address.coord[0] %>><br>
+			&#8195;	Coordy: <input type="text" name="coordy" value=<%= rest.address.coord[1] %>><br>
+
+			<input type="submit" value="Edit"/>
+		</form>
+	</body>
+</html>
+

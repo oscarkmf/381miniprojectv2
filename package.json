@@ -1,0 +1,20 @@
+{
+    "name": "381PROJECT",
+    "description": "COMPS381F - Mini Project",
+    "author":"KONG KO LIMITED",
+    "version": "0.0.3",
+    "dependencies": {
+        "mongodb": "^2.2.31",
+        "express": "*",
+        "ejs": "*",
+        "cookie-session": "*",
+        "body-parser": "*",
+        "formidable": "latest"
+    },
+    "scripts": {
+        "start": "node server"
+    },
+    "engines": {
+        "node": ">= 6.0.0"
+    }
+}

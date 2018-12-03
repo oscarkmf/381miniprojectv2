@@ -1,0 +1,76 @@
+<html>
+	<body>
+	<head>
+		<title>Restaurant</title>
+		<h1>Restaurants</h1>
+		</head>
+		<p>Restaurant ID: <%= rest.restaurant_id %></p>
+		<p>Name: <%= rest.name %></p>
+		<p>Borough: <%= rest.borough %></p>
+		<p>Cuisine: <%= rest.cuisine %></p>
+		<% if(rest.photo != "" && ((rest.mimetype == "image/gif") || (rest.mimetype == "image/jpeg") || (rest.mimetype == "image/png"))){%>
+		<p>Photo:<img src="data:<%= rest.mimetype %>;base64,<%= rest.photo %>" width="200" height="100"/></p>
+		<% }else{ %>
+		<p>Photo: null</p>
+		<% } %>
+		<p>Address:</p>
+		<p>Street: <%= rest.address.street %></p>
+		<p>Building: <%= rest.address.building %></p>
+		<p>Zipcode: <%= rest.address.zipcode %></p>
+		<p>Coord: <%= rest.address.coord %></p>
+		<% if(rest.grades.length != 0) {%>
+			<p>Grades:</p>
+			<% for (var i = 0; i < rest.grades.length; i++) { %>
+				&#8195;User: <%= rest.grades[i].user %>
+				&#8195;Score: <%= rest.grades[i].score %>
+				</br>
+			<% } %>
+		<% }else{ %>
+			<p>Grades: null</p>
+		<% } %>
+		<p>Owner: <%= rest.owner %></p>
+
+		<p>
+
+		<!--<form action="http://www.google.com/maps/place/ <%= rest.address.coord[0]%>, <%= rest.address.coord[0] %>">
+   		<input type="submit" value="Google map" /> -->
+		
+		<a href="http://www.google.com/maps/place/ <%= rest.address.coord[0]%>, <%= rest.address.coord[1] %>"> Google Map </a> 
+		</p>		
+
+		<%if (user == rest.owner){ %>
+		<form action="/edit">
+			<input name="_id" value="<%= rest._id %>" style="display: none;">
+			<input type="submit" value="Edit">
+		</form>
+		<% } %>
+
+		<% var rated = false; %>
+		<% for (var i = 0; i < rest.grades.length; i++) { %>
+			<%if (rest.grades[i].user == user) { %>
+				<% rated = true; %>
+			<% } %>
+		<% } %>
+
+		<%if (rated == false){ %>
+		<form action="/rate" >
+			<input name="_id" value="<%= rest._id %>" style="display: none;">
+			<input type="submit" value="Rate">
+		</form>
+		<% } %>
+
+		<%if (user == rest.owner){ %>
+		<form action="/delete">
+			<input name="_id" value="<%= rest._id %>" style="display: none;">
+			<input type="submit" value="Delete">
+		</form>
+		<% } %>
+
+		<button onclick="goBack()">Go Back</button>
+
+		<script>
+		function goBack() {window.history.back();}
+		</script>
+	</body>
+</html>
+
